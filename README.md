@@ -51,19 +51,12 @@ pip install -r requirements.txt
 
 ```mermaid
 flowchart LR
-    A[Packet Capture (Scapy sniff)] --> B[Protocol Analysis (TCP/UDP/ICMP)]
-    B --> C[Anomaly Detection (Suspicious Ports, DoS, Port Scans)]
-    B --> D[Save Packets (.pcap format)]
-    C --> E[Report (Protocol Statistics + Alerts)]
+    A[Packet Capture - Scapy] --> B[Protocol Analysis - TCP/UDP/ICMP]
+    B --> C[Anomaly Detection - Suspicious Ports, DoS, Port Scans]
+    B --> D[Save Packets - pcap format]
+    C --> E[Report - Statistics & Alerts]
     D --> E
 ```
-
-This diagram shows how network packets are:
-1. **Captured** using Scapy
-2. **Analyzed** to detect protocols (TCP/UDP/ICMP)
-3. Checked for **anomalies** (DoS-like traffic, port scan, suspicious ports)
-4. **Saved** to `.pcap` for offline analysis in Wireshark
-5. Summarized into a **report** with statistics and alerts
 
 ---
 
