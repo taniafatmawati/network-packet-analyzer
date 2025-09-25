@@ -104,7 +104,7 @@ Protocol Statistics:
 
 ## 🔮 Future Improvements
 - Add real-time visualization (graphs/charts for traffic)
-- Build GUI dashboard with Tkinter or Flask
+- Build GUI dashboard
 - Extend anomaly detection with ML models
 
 ---
