@@ -65,7 +65,7 @@ flowchart LR
 Run the analyzer:
 
 ```bash
-sudo python analyzer.py
+python analyzer.py
 ```
 
 Example output:
