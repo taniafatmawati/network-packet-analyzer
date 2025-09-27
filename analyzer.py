@@ -12,6 +12,8 @@ import platform
 import time
 import signal
 from collections import Counter, defaultdict
+import psutil
+from scapy.all import get_if_list
 
 from scapy.all import sniff, wrpcap, IP, TCP, UDP, ICMP, get_if_list, conf
 
@@ -70,15 +72,28 @@ def detect_anomalies(ip_src):
 
 
 def choose_interface():
-    """List available interfaces and let user choose"""
+    """List available interfaces with friendly names and IPs, let user choose"""
     ifaces = get_if_list()
     if not ifaces:
         print("[!] No network interfaces detected by Scapy.")
         return None
 
+    nics = psutil.net_if_addrs()
+
     print("Available interfaces:")
     for i, iface in enumerate(ifaces):
-        print(f"  {i}: {iface}")
+        display_name = iface
+        ip_list = []
+
+        if iface in nics:
+            for snic in nics[iface]:
+                if snic.family == 2:  # AF_INET (IPv4)
+                    ip_list.append(snic.address)
+
+        if ip_list:
+            display_name = f"{iface} (IPv4: {', '.join(ip_list)})"
+
+        print(f"  {i}: {display_name}")
 
     try:
         sel = int(input("Choose interface index to capture on (default 0): ") or 0)
