@@ -37,6 +37,7 @@ Do not use it for unauthorized packet sniffing or in production environments.
 ## 📦 Requirements
 - Python 3.x
 - `scapy` library
+- `psutil` (for friendly interface names)
 
 Install dependencies:
 ```bash
@@ -81,12 +82,17 @@ Stop with **Ctrl+C** → packets will be saved to `capture.pcap`.
 - Run **PowerShell** or **CMD** → **Run as Administrator**
 
 3) Setup Virtual Environment
-```
+```powershell
 cd C:\path\to\network-packet-analyzer
 
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+```
+
+If Activate.ps1 fails, try with CMD:
+```cmd
+.\venv\Scripts\activate.bat
 ```
 
 4) Run Analyzer
@@ -101,11 +107,8 @@ Right click → **Run as Administrator** → run-windows.bat
 5) Troubleshooting
 - `No libpcap provider available` → Install Npcap in WinPcap-compatible mode
 - `PermissionError` → Run as Administrator
+- `The system cannot find the path specified` → venv missing → run `python -m venv venv` again
 - Layer-2 sniffing unavailable → script will fallback to **L3 (IP-only)** capture
-- To list interfaces:
-```
-python -c "from scapy.all import get_if_list; print(get_if_list())"
-```
 
 Stop with **Ctrl+C** → packets will be saved to `capture.pcap`.
 
@@ -113,8 +116,17 @@ Stop with **Ctrl+C** → packets will be saved to `capture.pcap`.
 ## 📊 Example Output
 
 ```
-Starting Network Packet Analyzer (press Ctrl+C to stop)...
+Available interfaces:
+  0: \Device\NPF_{19CE0FDA-...} (IPv4: 192.168.56.1)
+  1: \Device\NPF_{335B866A-...} (IPv4: 192.168.1.8)
+  2: \Device\NPF_Loopback
 
+Choose interface index to capture on (default 0): 1
+[+] Starting capture on interface: \Device\NPF_{335B866A-...}
+```
+
+Live packet capture:
+```
 [TCP] 192.168.1.10 → 142.250.182.14 | SrcPort: 51512, DstPort: 443
 [UDP] 192.168.1.10 → 8.8.8.8 | SrcPort: 5353, DstPort: 53
 [ICMP] 192.168.1.10 → 192.168.1.1 | Type: 8
