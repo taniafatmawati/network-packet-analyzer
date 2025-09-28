@@ -1,0 +1,16 @@
+# Python / virtualenv
+venv/
+__pycache__/
+*.pyc
+
+# captures & logs
+capture.pcap
+*.pcap
+analyzer.log
+*.log
+
+# OS files
+.DS_Store
+
+.GIT
+GIT
