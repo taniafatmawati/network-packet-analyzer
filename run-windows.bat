@@ -18,5 +18,5 @@ if exist venv\Scripts\activate (
 )
 
 REM Run analyzer
-python -i analyzer.py
 pause
+python -i analyzer.py
