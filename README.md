@@ -179,9 +179,67 @@ scp user@server:/path/to/network-packet-analyzer/capture.pcap ~/Downloads/
 
 > ⚠️ Note: `capture.pcap` is **not included** in the repository. Generate it safely using the demo script.
 
-📸 Example Screenshot:
+---
 
-![Terminal Output](screenshots/output-terminal.png)
+### Example Demo Output
+
+```
+Available interfaces:
+  0: lo - IPv4: 127.0.0.1
+  1: enp0s3 - IPv4: 192.168.1.64
+  2: tun0 - IPv4: 10.8.0.1
+
+Choose interface index to capture on (default 0): 0
+[+] Starting capture on interface: lo
+
+Live capture:
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 60032, DstPort: 4444
+   ⚠️ Anomaly detected: Connection attempt to suspicious port 4444
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 60046, DstPort: 4444
+   ⚠️ Anomaly detected: Connection attempt to suspicious port 4444
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 4444, DstPort: 60046
+   ⚠️ Possible DoS attack detected from 127.0.0.1 (21 connections in 5s)
+[UDP] 127.0.0.1 → 127.0.0.1 | SrcPort: 36138, DstPort: 9999
+[ICMP] 127.0.0.1 → 127.0.0.1 | Type: 8
+[ICMP] 127.0.0.1 → 127.0.0.1 | Type: 0
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 32782, DstPort: 80
+   ⚠️ Possible DoS attack detected from 127.0.0.1 (25 connections in 5s)
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 53374, DstPort: 16
+   ⚠️ Possible DoS attack detected from 127.0.0.1 (33 connections in 5s)
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 53496, DstPort: 9
+   ⚠️ Possible DoS attack detected from 127.0.0.1 (37 connections in 5s)
+   ⚠️ Possible Port Scan detected from 127.0.0.1 (scanned 11 ports in 10s)
+[TCP] 127.0.0.1 → 127.0.0.1 | SrcPort: 60292, DstPort: 3
+   ⚠️ Possible DoS attack detected from 127.0.0.1 (50 connections in 5s)
+   ⚠️ Possible Port Scan detected from 127.0.0.1 (scanned 16 ports in 10s)
+
+... (similar alerts repeated) ...
+
+When stopped with **Ctrl+C**:
+📊 Capture stopped. Saving results...
+[+] Packets saved to capture.pcap
+
+📈 Protocol Statistics:
+ - TCP: 512 (96.2%)
+ - UDP: 2 (0.4%)
+ - ICMP: 18 (3.4%)
+
+Total packets captured: 532
+Capture duration: 71.2 seconds
+
+```
+
+### 📸 Example Demo Screenshot:
+
+**1) Live capture (analyzer console)**  
+![Live capture terminal](screenshots/demo-terminal.png)
+
+**2) Capture summary after stop (statistics & saved pcap)**  
+![Capture summary](screenshots/demo-summary.png)
+
+
+> Notes:
+> - Screenshots show example output from `demo-loopback.sh` run on interface `lo` (127.0.0.1).
 
 ---
 
