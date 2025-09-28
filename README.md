@@ -122,7 +122,6 @@ python analyzer.py
 Option B – Batch file (recommended):
 Right click `run-windows.bat` → **Run as Administrator**
 
---
 **Stop the capture**
 - Press **Ctrl+C** in the terminal
 - Results will automatically be saved to capture.pcap
@@ -136,7 +135,6 @@ Right click `run-windows.bat` → **Run as Administrator**
 This demo shows the analyzer in action using **interface 0 (loopback, 127.0.0.1)**.  
 All tests are safe and local — no external network impact.
 
---
 
 ### How to Run (Step-by-Step)
 
@@ -168,8 +166,6 @@ chmod +x demo-loopback.sh
   6. Controlled “many connects” simulation to trigger port-scan / DoS detection
 
 Watch Terminal A — you will see live packet logs, alerts for suspicious ports, port scans, and DoS-like traffic.
-
---
 
 ### Stopping & Inspecting Capture
 
