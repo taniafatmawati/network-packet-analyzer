@@ -145,9 +145,7 @@ def main():
         print("Try running this script as root (Linux) or Administrator (Windows).")
         sys.exit(1)
     finally:
-        if captured_packets:
-            print_summary()
-
+        pass
 
 if __name__ == "__main__":
     main()
