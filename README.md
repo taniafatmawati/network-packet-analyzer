@@ -77,14 +77,10 @@ pip install -r requirements.txt
 ```
 
 3) **Run the analyzer (requires root privileges)**
+Make sure to use the Python interpreter from your virtual environment:
 ```bash
-sudo python analyzer.py
+sudo -E ./venv/bin/python analyzer.py
 ```
-
-Stop the capture: Press Ctrl+C to stop
-Results will automatically be saved to capture.pcap
-
-📌 Tip: Open the .pcap file in Wireshark for further analysis.
 
 ### Windows Setup & Usage
 
@@ -126,10 +122,15 @@ python analyzer.py
 Option B – Batch file (recommended):
 Right click `run-windows.bat` → **Run as Administrator**
 
-5) **Stop the capture**
+---
+
+**Stop the capture**
 - Press **Ctrl+C** in the terminal
 - Results will automatically be saved to capture.pcap
 
+📌 Tip: Open the `capture.pcap` file in **Wireshark** for further analysis.
+
+---
 
 ## 📊 Example Output
 
