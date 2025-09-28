@@ -144,10 +144,10 @@ def main():
         print(f"[!] PermissionError: {pe}")
         print("Try running this script as root (Linux) or Administrator (Windows).")
         sys.exit(1)
-    except KeyboardInterrupt:
-        pass
     finally:
-        print_summary()
+        # Final summary only if not already printed by stop_sniff
+        if captured_packets:
+            print_summary()
 
 
 if __name__ == "__main__":
