@@ -132,28 +132,88 @@ Right click `run-windows.bat` → **Run as Administrator**
 
 ---
 
-## 📊 Example Output
+## 🎬 Demo (Loopback)
+
+This demo shows the analyzer in action using **interface 0 (loopback, 127.0.0.1)**.  
+All tests are safe and local — no external network impact.
+
+---
+
+### How to Run (Step-by-Step)
+
+#### Terminal A — Analyzer
+
+Start the analyzer and choose interface `0`:
+
+```bash
+sudo -E ./venv/bin/python analyzer.py
+# When prompted, type: 0
+````
+
+#### Terminal B — Demo Script
+
+Run a prepared demo sequence to generate TCP/UDP/ICMP traffic and trigger anomaly detection:
+
+```bash
+chmod +x demo-loopback.sh
+./demo-loopback.sh
+```
+
+* The script runs:
+
+  1. TCP test (HTTPS request via `curl`)
+  2. UDP test (DNS query via `nslookup`)
+  3. ICMP test (`ping`)
+  4. Suspicious port test (`nc` to 4444, plus temporary listener)
+  5. Port scan test (ports 1–20 via `nmap` or fallback `nc`)
+  6. Controlled “many connects” simulation to trigger port-scan / DoS detection
+
+Watch Terminal A — you will see live packet logs, alerts for suspicious ports, port scans, and DoS-like traffic.
+
+---
+
+### Stopping & Inspecting Capture
+
+* Stop the analyzer with **Ctrl+C**.
+* Results are automatically saved to `capture.pcap`.
+
+Inspect the pcap:
+
+```bash
+ls -l capture.pcap
+# Optional: view summary (requires tshark)
+tshark -r capture.pcap -q -z io,phs
+# Or copy to your local machine for Wireshark
+scp user@server:/path/to/network-packet-analyzer/capture.pcap ~/Downloads/
+```
+
+> ⚠️ Note: `capture.pcap` is **not included** in the repository. Generate it safely using the demo script.
+
+---
+
+### Example Demo Output
 
 ```
 Available interfaces:
-  0: \Device\NPF_{19CE0FDA-...} (IPv4: 192.168.56.1)
-  1: \Device\NPF_{335B866A-...} (IPv4: 192.168.1.8)
-  2: \Device\NPF_Loopback
+  0: lo - IPv4: 127.0.0.1
+  1: enp0s3 - IPv4: 192.168.1.64
+  2: tun0 - IPv4: 10.8.0.1
 
-Choose interface index to capture on (default 0): 1
-[+] Starting capture on interface: \Device\NPF_{335B866A-...}
+Choose interface index to capture on (default 0): 0
+[+] Starting capture on interface: lo
 ```
 
-Live packet capture:
+Live capture:
+
 ```
-[TCP] 192.168.1.10 → 142.250.182.14 | SrcPort: 51512, DstPort: 443
-[UDP] 192.168.1.10 → 8.8.8.8 | SrcPort: 5353, DstPort: 53
-[ICMP] 192.168.1.10 → 192.168.1.1 | Type: 8
+[TCP] 127.0.0.1 → 142.250.182.14 | SrcPort: 51512, DstPort: 443
+[UDP] 127.0.0.1 → 8.8.8.8 | SrcPort: 5353, DstPort: 53
+[ICMP] 127.0.0.1 → 127.0.0.1 | Type: 8
    ⚠️ Anomaly detected: Connection attempt to suspicious port 4444
-   ⚠️ Possible Port Scan detected from 192.168.1.10 (scanned 12 ports in 10s)
+   ⚠️ Possible Port Scan detected from 127.0.0.1 (scanned 12 ports in 10s)
 ```
 
-When stopped with Ctrl+C, results are saved:
+When stopped with **Ctrl+C**, results:
 
 ```
 Capture stopped. Saving results...
@@ -168,11 +228,21 @@ Total packets captured: 207
 Capture duration: 65.2 seconds
 ```
 
-📸 **Example Demo Screenshot**
+📸 Example Screenshot:
 
 ![Terminal Output](screenshots/output-terminal.png)
 
 ---
+
+### Notes
+
+* The demo script is **loopback-only** and safe.
+* If you want to reproduce external traffic, change the interface and run from another host.
+* Ensure `nmap` and `nc` are installed for full test coverage:
+
+```bash
+sudo dnf install -y nmap ncat
+```
 
 ## 🔮 Future Improvements
 - Add real-time visualization (graphs/charts for traffic)
