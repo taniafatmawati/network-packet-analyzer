@@ -145,7 +145,6 @@ def main():
         print("Try running this script as root (Linux) or Administrator (Windows).")
         sys.exit(1)
     finally:
-        # Final summary only if not already printed by stop_sniff
         if captured_packets:
             print_summary()
 
