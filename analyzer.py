@@ -72,7 +72,7 @@ def detect_anomalies(ip_src):
 
 
 def choose_interface():
-    """List available interfaces with friendly names and IPs (like ipconfig), let user choose"""
+    """List available interfaces"""
     nics = psutil.net_if_addrs()
     if not nics:
         print("[!] No network interfaces detected.")
