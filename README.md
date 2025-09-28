@@ -132,8 +132,7 @@ Right click `run-windows.bat` → **Run as Administrator**
 
 ## 🎬 Demo (Loopback)
 
-This demo shows the analyzer in action using **interface 0 (loopback, 127.0.0.1)**.  
-All tests are safe and local — no external network impact.
+This demo uses **interface 0 (loopback, 127.0.0.1)** so anyone can reproduce it locally without affecting networks.
 
 
 ### How to Run (Step-by-Step)
@@ -156,21 +155,17 @@ chmod +x demo-loopback.sh
 ./demo-loopback.sh
 ```
 
-* The script runs:
-
-  1. TCP test (HTTPS request via `curl`)
-  2. UDP test (DNS query via `nslookup`)
-  3. ICMP test (`ping`)
-  4. Suspicious port test (`nc` to 4444, plus temporary listener)
-  5. Port scan test (ports 1–20 via `nmap` or fallback `nc`)
-  6. Controlled “many connects” simulation to trigger port-scan / DoS detection
+The script runs:
+- TCP test (curl) — optional external request
+- UDP test — send a UDP packet to localhost (port 9999)
+- ICMP test — ping 127.0.0.1
+- Suspicious port test — attempt to connect to port 4444, then start a listener and connect successfully
+- Port scan test — scan ports 1–20 (nmap or nc fallback)
+- Controlled many-connects to try to trigger port-scan/DoS alerts
 
 Watch Terminal A — you will see live packet logs, alerts for suspicious ports, port scans, and DoS-like traffic.
 
-### Stopping & Inspecting Capture
-
-* Stop the analyzer with **Ctrl+C**.
-* Results are automatically saved to `capture.pcap`.
+Stop the analyzer with **Ctrl+C**. Results are automatically saved to `capture.pcap`.
 
 Inspect the pcap:
 
@@ -184,45 +179,6 @@ scp user@server:/path/to/network-packet-analyzer/capture.pcap ~/Downloads/
 
 > ⚠️ Note: `capture.pcap` is **not included** in the repository. Generate it safely using the demo script.
 
----
-
-### Example Demo Output
-
-```
-Available interfaces:
-  0: lo - IPv4: 127.0.0.1
-  1: enp0s3 - IPv4: 192.168.1.64
-  2: tun0 - IPv4: 10.8.0.1
-
-Choose interface index to capture on (default 0): 0
-[+] Starting capture on interface: lo
-```
-
-Live capture:
-
-```
-[TCP] 127.0.0.1 → 142.250.182.14 | SrcPort: 51512, DstPort: 443
-[UDP] 127.0.0.1 → 8.8.8.8 | SrcPort: 5353, DstPort: 53
-[ICMP] 127.0.0.1 → 127.0.0.1 | Type: 8
-   ⚠️ Anomaly detected: Connection attempt to suspicious port 4444
-   ⚠️ Possible Port Scan detected from 127.0.0.1 (scanned 12 ports in 10s)
-```
-
-When stopped with **Ctrl+C**, results:
-
-```
-Capture stopped. Saving results...
-[+] Packets saved to capture.pcap
-
-📈 Protocol Statistics:
- - TCP: 152 (72.0%)
- - UDP: 47 (22.3%)
- - ICMP: 8 (3.8%)
-
-Total packets captured: 207
-Capture duration: 65.2 seconds
-```
-
 📸 Example Screenshot:
 
 ![Terminal Output](screenshots/output-terminal.png)
@@ -232,7 +188,7 @@ Capture duration: 65.2 seconds
 ### Notes
 
 * The demo script is **loopback-only** and safe.
-* If you want to reproduce external traffic, change the interface and run from another host.
+* For a realistic network demo, capture on your LAN interface and run tests from a different host.
 * Ensure `nmap` and `nc` are installed for full test coverage:
 
 ```bash
