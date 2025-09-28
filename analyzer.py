@@ -11,11 +11,11 @@ import sys
 import platform
 import time
 import signal
+import socket
 from collections import Counter, defaultdict
 import psutil
-from scapy.all import get_if_list
 
-from scapy.all import sniff, wrpcap, IP, TCP, UDP, ICMP, get_if_list, conf
+from scapy.all import sniff, wrpcap, IP, TCP, UDP, ICMP, conf
 
 # Global state
 captured_packets = []
@@ -72,35 +72,26 @@ def detect_anomalies(ip_src):
 
 
 def choose_interface():
-    """List available interfaces with friendly names and IPs, let user choose"""
-    ifaces = get_if_list()
-    if not ifaces:
-        print("[!] No network interfaces detected by Scapy.")
+    """List available interfaces with friendly names and IPs (like ipconfig), let user choose"""
+    nics = psutil.net_if_addrs()
+    if not nics:
+        print("[!] No network interfaces detected.")
         return None
 
-    nics = psutil.net_if_addrs()
-
+    interfaces = []
     print("Available interfaces:")
-    for i, iface in enumerate(ifaces):
-        display_name = iface
-        ip_list = []
-
-        if iface in nics:
-            for snic in nics[iface]:
-                if snic.family == 2:  # AF_INET (IPv4)
-                    ip_list.append(snic.address)
-
-        if ip_list:
-            display_name = f"{iface} (IPv4: {', '.join(ip_list)})"
-
+    for i, (iface, addrs) in enumerate(nics.items()):
+        ipv4s = [a.address for a in addrs if a.family == socket.AF_INET]
+        display_name = f"{iface} - IPv4: {', '.join(ipv4s) if ipv4s else 'N/A'}"
+        interfaces.append(iface)
         print(f"  {i}: {display_name}")
 
     try:
         sel = int(input("Choose interface index to capture on (default 0): ") or 0)
-        return ifaces[sel]
+        return interfaces[sel]
     except Exception:
         print("Invalid selection, using default interface.")
-        return ifaces[0]
+        return interfaces[0]
 
 
 def print_summary():
