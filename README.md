@@ -63,54 +63,72 @@ flowchart LR
 
 ### Linux / macOS
 
-Run the analyzer with root privileges:
+1) **Clone and enter the project folder**
+```bash
+git clone https://github.com/taniafatmawati/network-packet-analyzer.git
+cd network-packet-analyzer
+```
 
+2) **Create a virtual environment & install dependencies**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+3) **Run the analyzer (requires root privileges)**
 ```bash
 sudo python analyzer.py
 ```
 
-Stop with **Ctrl+C** → packets will be saved to `capture.pcap`.
+Stop the capture: Press Ctrl+C to stop
+Results will automatically be saved to capture.pcap
+
+📌 Tip: Open the .pcap file in Wireshark for further analysis.
 
 ### Windows Setup & Usage
 
-1) Install Npcap
+1) **Install Npcap**
 - Download: [Npcap](https://npcap.com/)  
 - Enable **“WinPcap API-compatible mode”** during installation
 - Restart after installation
 
-2) Open Terminal as Administrator
-- Run **PowerShell** or **CMD** → **Run as Administrator**
-
-3) Setup Virtual Environment
+2) **Clone and enter the project folder**
 ```powershell
-cd C:\path\to\network-packet-analyzer
+git clone https://github.com/yourusername/network-packet-analyzer.git
+cd network-packet-analyzer
+```
 
+3) **Create a virtual environment & install dependencies**
+```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-If Activate.ps1 fails, try with CMD:
-```cmd
-.\venv\Scripts\activate.bat
+If PowerShell blocks the script, run:
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\venv\Scripts\Activate.ps1
 ```
 
-4) Run Analyzer
-Option A – Manual:
+(Alternative via CMD:)
+```cmd
+venv\Scripts\activate.bat
 ```
+
+4) **Run Analyzer**
+Option A – Manual:
+```powershell
 python analyzer.py
 ```
 
 Option B – Batch file (recommended):
-Right click → **Run as Administrator** → run-windows.bat
+Right click `run-windows.bat` → **Run as Administrator**
 
-5) Troubleshooting
-- `No libpcap provider available` → Install Npcap in WinPcap-compatible mode
-- `PermissionError` → Run as Administrator
-- `The system cannot find the path specified` → venv missing → run `python -m venv venv` again
-- Layer-2 sniffing unavailable → script will fallback to **L3 (IP-only)** capture
-
-Stop with **Ctrl+C** → packets will be saved to `capture.pcap`.
+5) **Stop the capture**
+- Press **Ctrl+C** in the terminal
+- Results will automatically be saved to capture.pcap
 
 
 ## 📊 Example Output
